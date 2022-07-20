@@ -1,0 +1,10 @@
+DB_HOST=localhost
+DB_USER=postgres
+DB_PASS=123
+DB_NAME=sichelp
+DB_PORT=3333
+DIALECT=postgres
+
+PORT=4444
+
+USER_KEY=123
