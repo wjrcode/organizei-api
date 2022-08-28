@@ -5,36 +5,35 @@ const bcrypt = require('bcrypt-nodejs')
 module.exports = Router({ mergeParams: true }).put(
 	'/usuarios/:id',
 	userAuthMiddleware,
+	
 	async (req, res, next) => {
 		try {
 			const { id } = req.params
-			const { nome, cidade, senha } = req.body
-			const { usuario: Usuario } = req.db.models
-			const { usuario: loggedUser } = req
+			const { nome, apelido, email } = req.body
+			const { models } = req.db
 
 			if (!nome) return res.status(400).json('Nome não informado!')
-			if (!cidade) return res.status(400).json('Cidade não informada!')
+			if (!apelido) return res.status(400).json('Apelido não informado!')
+			if (!email) return res.status(400).json('Email não informado!')
 
-			const usuario = await Usuario.findByPk(id, { attributes: { exclude: ['senha'] } })
+			const usuario = await models.usuario.findByPk(id)
 
 			if (!usuario) return res.status(400).json('Usuário não cadastrado!')
 
-			if (usuario.id != loggedUser.id) {
-				if (usuario.master && !loggedUser.master) return next('')
-				if (usuario.admin && !loggedUser.master) return next('Sem permissão!')
-				if (!loggedUser.admin)  return next('Sem permissão')
+			if (!(email == usuario.email)) {
+				let exists = await models.usuario.findOne({ where: { email } })
+
+				if (exists) return res.status(400).json({ msg: 'Já existe um usuário cadastrado com esse e-mail!' })
 			}
 
-			usuario.nome = nome
-			usuario.cidade = cidade
-
-			if (senha) {
-				const salt = bcrypt.genSaltSync(10)
-				const senhaCrypt = bcrypt.hashSync(senha, salt)
-				usuario.senha = senhaCrypt
-			}
-			
-			await usuario.save()
+			await models.usuario.update(
+				{
+					nome,
+					apelido,
+					email,
+				},
+				{ where: { id: id } }
+			)
 
 			return res.status(204).send()
 		} catch (error) {

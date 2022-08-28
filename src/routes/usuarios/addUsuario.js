@@ -5,40 +5,31 @@ module.exports = Router({ mergeParams: true }).post(
 	'/usuarios',
 	async (req, res, next) => {
 		try {
-			const { nome, cidade, email, senha } = req.body
-			const { usuario: Usuario } = req.db.models
+			const { nome, apelido, email, senha } = req.body
+			const { models } = req.db
 
-			if (!nome) return res.status(400).json('Nome não informado')
+			if (!nome) return res.status(400).json('Nome não informado!')
+			if (!apelido) return res.status(400).json('Apelido não informado!')
+			if (!email) return res.status(400).json('Email não informado!')
+			if (!senha) return res.status(400).json('Senha não informada!')
 
-			if (!cidade) return res.status(400).json('Cidade não informada')
-
-			if (!email) return res.status(400).json('Email não informado')
-
-			if (!senha) return res.status(400).json('Senha não informada')
-
-			const exists = await Usuario.findOne({ where: { email } })
+			const exists = await models.usuario.findOne({ where: { email } })
 
 			if (exists) {
-				return res.status(400).json('Já existe um usuário cadastrado com esse email!')
+				return res.status(400).json('Já existe um usuário cadastrado com esse e-mail!')
 			}
 
-			const isMaster = email === 'admin@seculos.com.br'
-
 			const salt = bcrypt.genSaltSync(10)
-
 			const senhaCrypt = bcrypt.hashSync(senha, salt)
 
-			await Usuario.create({
+			const usuario = await models.usuario.create({
 				nome,
-				cidade,
+				apelido,
 				email,
 				senha: senhaCrypt,
-				admin: isMaster,
-				master: isMaster,
-				ativo: isMaster
 			})
 
-			return res.status(204).send()
+			return res.status(201).json({ id: usuario.id,  valido: true, msg: 'Usuário criada com sucesso!' })
 		} catch (error) {
 			return next(error)
 		}
