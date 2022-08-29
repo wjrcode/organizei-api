@@ -1,6 +1,5 @@
 const Router = require('express').Router
 const userAuthMiddleware = require('../../../middlewares/userAuth.middleware')
-const bcrypt = require('bcrypt-nodejs')
 
 module.exports = Router({ mergeParams: true }).put(
 	'/usuarios/:id',

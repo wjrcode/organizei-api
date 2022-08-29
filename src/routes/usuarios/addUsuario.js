@@ -10,7 +10,7 @@ module.exports = Router({ mergeParams: true }).post(
 
 			if (!nome) return res.status(400).json('Nome não informado!')
 			if (!apelido) return res.status(400).json('Apelido não informado!')
-			if (!email) return res.status(400).json('Email não informado!')
+			if (!email) return res.status(400).json('E-mail não informado!')
 			if (!senha) return res.status(400).json('Senha não informada!')
 
 			const exists = await models.usuario.findOne({ where: { email } })
@@ -29,7 +29,7 @@ module.exports = Router({ mergeParams: true }).post(
 				senha: senhaCrypt,
 			})
 
-			return res.status(201).json({ id: usuario.id,  valido: true, msg: 'Usuário criada com sucesso!' })
+			return res.status(201).json({ id: usuario.id,  valido: true, msg: 'Usuário criado com sucesso!' })
 		} catch (error) {
 			return next(error)
 		}

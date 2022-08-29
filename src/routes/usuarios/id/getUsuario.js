@@ -13,7 +13,7 @@ module.exports = Router({ mergeParams: true }).get(
 			const usuario = await models.usuario.findByPk(id, { attributes: { exclude: ['senha'] } })
 			if (!usuario) return res.status(400).json('Usuário não cadastrado!')
 
-			return res.status(204).send()
+			return res.json(usuario)
 		} catch (error) {
 			return next(error)
 		}

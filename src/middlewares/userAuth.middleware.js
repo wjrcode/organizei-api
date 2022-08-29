@@ -16,8 +16,6 @@ module.exports = async (req, res, next) => {
 
 		if (!usuario) return res.status(403).send('Usuário não encontrado!')
 
-		if (!usuario.ativo) return res.status(403).send('Usuário inativo!')
-
 		req.usuario = usuario
 		return next()
 	} catch (error) {
