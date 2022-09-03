@@ -9,17 +9,13 @@ module.exports = Router({ mergeParams: true }).post(
 			const { email, senha } = req.body
 			const { models } = req.db
 
-			console.log('apoa loGay')
-			console.log(email)
-			console.log(senha)
-
 			if (!email || !senha) return res.status(400).json('E-mail/Senha inválidos!')
 
 			const usuario = await models.usuario.findOne({ where: { email } })
 
 			if (!usuario) return res.status(400).json('Usuário não cadastrado!')
 
-			console.log(usuario.senha)
+			console.log(senha)
 
 			if (!bcrypt.compareSync(senha, usuario.senha))
 				return res.status(400).json('Senha incorreta!')
@@ -38,7 +34,7 @@ module.exports = Router({ mergeParams: true }).post(
 	
 				const token = jwt.sign(playload, process.env.USER_KEY)
 	
-				return res.json({ ...playload, token })
+				return res.json({ ...playload, token, msg: usuario.apelido })
 		} catch (error) {
 			return next(error)
 		}
