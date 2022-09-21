@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
 			concluido: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 			data: { type: DataTypes.DATE, allowNull: false },
 			observacao: { type: DataTypes.STRING(45), allowNull: false },
-			cor: { type: DataTypes.STRING(6), allowNull: false },
+			cor: { type: DataTypes.BIGINT, allowNull: false },
 			prioridade: { type: DataTypes.STRING(5), allowNull: false }
 		},
 		{

@@ -9,11 +9,15 @@ module.exports = Router({ mergeParams: true }).post(
 
 			console.log('tarefinha')
 
+			console.log(cor)
+
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })
 			if (!data) return res.status(202).json({valido: false, msg: 'Data não informado!'})
 			if (!observacao) return res.status(202).json({valido: false, msg: 'Observação não informado!'})
 			if (!prioridade) return res.status(202).json({valido: false, msg: 'Prioridade não informada!'})
 			if (!cor) return res.status(202).json({valido: false, msg: 'Cor não informada!'})
+
+			if (cor == 0) return res.status(202).json({valido: false, msg: 'Cor não informada!'})
 
 			const exists = await models.tarefa.findOne({ where: { nome } })
 
@@ -28,14 +32,14 @@ module.exports = Router({ mergeParams: true }).post(
 
 			const tarefa = await models.tarefa.create({
 				nome,
-				data : new Date(),//formatter.format(new Date(new Date().toISOString().replace('Z', ''))),
+				data,//formatter.format(new Date(new Date().toISOString().replace('Z', ''))),
 				observacao,
 				prioridade,
 				cor,
 				usuarioId: 1
 			})
 
-			return res.status(201).json({ id: tarefa.id, valido: true, msg: 'Usuário criado com sucesso!' })
+			return res.status(201).json({ id: tarefa.id, valido: true, msg: 'Tarefa criada com sucesso!' })
 		} catch (error) {
 			return next(error)
 		}
