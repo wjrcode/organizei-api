@@ -10,17 +10,17 @@ module.exports = Router({ mergeParams: true }).post(
 
 
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })
-			if (!data) return res.status(202).json({valido: false, msg: 'Data não informado!'})
+			if (!data) return res.status(202).json({valido: false, msg: 'Data não informada!'})
 			if (!observacao) return res.status(202).json({valido: false, msg: 'Observação não informado!'})
 			if (!prioridade) return res.status(202).json({valido: false, msg: 'Prioridade não informada!'})
 			if (!cor) return res.status(202).json({valido: false, msg: 'Cor não informada!'})
 
 			if (cor == 0) return res.status(202).json({valido: false, msg: 'Cor não informada!'})
 
-			const exists = await models.tarefa.findOne({ where: { nome } })
+			const exists = await models.tarefa.findOne({ where: { nome, data: convertDateTime(data) } })
 
 			if (exists) {
-				return res.status(202).json({valido: false, msg: 'Já existe um usuário cadastrado com esse e-mail!'})
+				return res.status(202).json({valido: false, msg: 'Já existe um tarefa cadastradoa com esse nome e essa data!'})
 
 			
 			}
