@@ -1,4 +1,5 @@
 const Router = require('express').Router
+const convertDateTime = require('../../helpers/convertDateTime')
 
 module.exports = Router({ mergeParams: true }).post(
 	'/tarefas',
@@ -7,9 +8,6 @@ module.exports = Router({ mergeParams: true }).post(
 			const { nome, data, observacao, prioridade, cor } = req.body
 			const { models } = req.db
 
-			console.log('tarefinha')
-
-			console.log(cor)
 
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })
 			if (!data) return res.status(202).json({valido: false, msg: 'Data não informado!'})
@@ -27,12 +25,9 @@ module.exports = Router({ mergeParams: true }).post(
 			
 			}
 
-			//let formatter = new Intl.DateTimeFormat('pt-BR'/*, { timeZone: "America/Denver" }*/)
-
-
 			const tarefa = await models.tarefa.create({
 				nome,
-				data,//formatter.format(new Date(new Date().toISOString().replace('Z', ''))),
+				data: convertDateTime(data),//formatter.format(new Date(new Date().toISOString().replace('Z', ''))),
 				observacao,
 				prioridade,
 				cor,
