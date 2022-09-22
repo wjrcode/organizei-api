@@ -27,7 +27,7 @@ module.exports = Router({ mergeParams: true }).post(
 
 			const tarefa = await models.tarefa.create({
 				nome,
-				data: convertDateTime(data),//formatter.format(new Date(new Date().toISOString().replace('Z', ''))),
+				data: convertDateTime(data),
 				observacao,
 				prioridade,
 				cor,
