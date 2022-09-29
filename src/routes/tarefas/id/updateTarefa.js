@@ -1,14 +1,15 @@
 const Router = require('express').Router
-const convertDateTime = require('../../helpers/convertDateTime')
+const convertDateTime = require('../../../helpers/convertDateTime')
 
-module.exports = Router({ mergeParams: true }).post(
-	'/tarefas',
+module.exports = Router({ mergeParams: true }).put(
+	'/tarefas/:id',
 	async (req, res, next) => {
 		try {
+			const { id } = req.params
 			const { nome, data, observacao, prioridade, cor } = req.body
 			const { models } = req.db
 
-
+			if (!id) return res.status(202).json({ valido: false, msg: 'Id não informado!' })
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })
 			if (!data) return res.status(202).json({ valido: false, msg: 'Data não informada!' })
 			if (!observacao) return res.status(202).json({ valido: false, msg: 'Observação não informado!' })
@@ -17,20 +18,21 @@ module.exports = Router({ mergeParams: true }).post(
 
 			if (cor == 0) return res.status(202).json({ valido: false, msg: 'Cor não informada!' })
 
-			const exists = await models.tarefa.findOne({ where: { nome, data: convertDateTime(data) } })
+			const exists = await models.tarefa.findByPk(id)
 
-			if (exists) return res.status(202).json({ valido: false, msg: 'Já existe um tarefa cadastrada com esse nome e essa data!' })
+			if (!exists) return res.status(202).json({ valido: false, msg: 'Tarefa não encontrada!' })
 
-			const tarefa = await models.tarefa.create({
-				nome,
-				data: convertDateTime(data),
-				observacao,
-				prioridade,
-				cor,
-				usuarioId: 1
-			})
+			const tarefa = await models.tarefa.update(
+				{
+					nome,
+					data: convertDateTime(data),
+					observacao,
+					prioridade,
+					cor,
+				},
+				{ where: { id: id } })
 
-			return res.status(201).json({ id: tarefa.id, valido: true, msg: 'Tarefa criada com sucesso!' })
+			return res.status(201).json({ id: tarefa.id, valido: true, msg: 'Tarefa alterada com sucesso!' })
 		} catch (error) {
 			return next(error)
 		}
