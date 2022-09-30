@@ -10,16 +10,30 @@ module.exports = Router({ mergeParams: true }).get(
 
 			const results = await await models.tarefa.findAll({
 				order: [['data', 'asc']],
-				where: {concluido : false}
+				where: { concluido: false }
 			})
 
 			let tarefas = []
 
 
+
+
 			results.map((tarefa) => {
+
+				let tamanho = tarefa.nome.length
+
+				let nomeFormatado = ''
+
+				for (var i = 0; i < tamanho; i += 15) {
+
+					if (i > 0) nomeFormatado = nomeFormatado + `\n`;
+
+					nomeFormatado = nomeFormatado + tarefa.nome.slice(i, i + 15)
+
+				}
 				tarefas.push({
 					id: tarefa.id,
-					nome: tarefa.nome,
+					nome: nomeFormatado,
 					data: convertDateTime(tarefa.data),
 					observacao: tarefa.observacao,
 					prioridade: tarefa.prioridade,
