@@ -9,7 +9,7 @@ module.exports = Router({ mergeParams: true }).put(
 			const { nome, data, observacao, prioridade, cor } = req.body
 			const { models } = req.db
 
-			if (!id) return res.status(202).json({ valido: false, msg: 'Id não informado!' })
+			if (!id || id == 'null') return res.status(202).json({ valido: false, msg: 'ID não informado!' })
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })
 			if (!data) return res.status(202).json({ valido: false, msg: 'Data não informada!' })
 			if (!observacao) return res.status(202).json({ valido: false, msg: 'Observação não informado!' })

@@ -9,7 +9,8 @@ module.exports = Router({ mergeParams: true }).get(
 			const { models } = req.db
 
 			const results = await await models.tarefa.findAll({
-				order: [['data', 'asc']]
+				order: [['data', 'asc']],
+				where: {concluido : false}
 			})
 
 			let tarefas = []
