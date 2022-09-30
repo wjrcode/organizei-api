@@ -33,7 +33,8 @@ module.exports = Router({ mergeParams: true }).get(
 				}
 				tarefas.push({
 					id: tarefa.id,
-					nome: nomeFormatado,
+					nome: tarefa.nome,
+					nomeFormatado,
 					data: convertDateTime(tarefa.data),
 					observacao: tarefa.observacao,
 					prioridade: tarefa.prioridade,
