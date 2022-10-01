@@ -14,10 +14,7 @@ module.exports = Router({ mergeParams: true }).get(
 			})
 
 			let tarefas = []
-
-
-
-
+			
 			results.map((tarefa) => {
 
 				let tamanho = tarefa.nome.length

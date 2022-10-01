@@ -19,7 +19,7 @@ module.exports = Router({ mergeParams: true }).post(
 
 			const exists = await models.tarefa.findOne({ where: { nome, data: convertDateTime(data) } })
 
-			if (exists) return res.status(202).json({ valido: false, msg: 'Já existe um tarefa cadastrada com esse nome e essa data!' })
+			if (exists) return res.status(202).json({ valido: false, msg: 'Já existe uma tarefa cadastrada com esse nome e essa data!' })
 
 			const tarefa = await models.tarefa.create({
 				nome,
