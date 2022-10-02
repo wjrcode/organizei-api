@@ -28,7 +28,7 @@ module.exports = Router({ mergeParams: true }).post(
 				usuarioId: 1
 			})
 
-			return res.status(201).json({ id: habito.id, valido: true, msg: 'Hábito criada com sucesso!' })
+			return res.status(201).json({ id: habito.id, valido: true, msg: 'Hábito criado com sucesso!' })
 		} catch (error) {
 			return next(error)
 		}
