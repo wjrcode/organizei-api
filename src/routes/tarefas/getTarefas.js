@@ -13,6 +13,11 @@ module.exports = Router({ mergeParams: true }).get(
 				where: { concluido: false }
 			})
 
+			const habitos = await await models.habito.findAll({
+				order: [['hora', 'asc']],
+				where: { concluido: false }
+			})
+
 			let tarefas = []
 			
 			results.map((tarefa) => {
@@ -35,7 +40,36 @@ module.exports = Router({ mergeParams: true }).get(
 					data: convertDateTime(tarefa.data),
 					observacao: tarefa.observacao,
 					prioridade: tarefa.prioridade,
-					cor: tarefa.cor
+					cor: tarefa.cor,
+					tipo: 'tarefa'
+				})
+			})
+
+			habitos.map((tarefa) => {
+
+				let tamanho = tarefa.nome.length
+
+				let nomeFormatado = ''
+
+				for (var i = 0; i < tamanho; i += 15) {
+
+					if (i > 0) nomeFormatado = nomeFormatado + `\n`;
+
+					nomeFormatado = nomeFormatado + tarefa.nome.slice(i, i + 15)
+
+				}
+				//console.log
+				const dia = tarefa.dias.replace(/(\[)|(\])|(\ )/g, "")
+
+				const dias = dia.split(',')
+				tarefas.push({
+					id: tarefa.id,
+					nome: tarefa.nome,
+					nomeFormatado,
+					hora: convertDateTime(tarefa.hora),
+					dias: dias,
+					cor: tarefa.cor,
+					tipo: 'habito'
 				})
 			})
 

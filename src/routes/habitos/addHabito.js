@@ -22,7 +22,7 @@ module.exports = Router({ mergeParams: true }).post(
 
 			const habito = await models.habito.create({
 				nome,
-				dias,
+				dias: dias.toString(),
 				hora: convertDateTime(hora),
 				cor,
 				usuarioId: 1

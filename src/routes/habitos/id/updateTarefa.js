@@ -24,7 +24,7 @@ module.exports = Router({ mergeParams: true }).put(
 			const habito = await models.habito.update(
 				{
 					nome,
-					dias,
+					dias: dias.toString(),
 					hora: convertDateTime(hora),
 					cor,
 				},

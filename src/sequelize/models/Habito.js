@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
 			concluido: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 			dias: { type: DataTypes.STRING(21), allowNull: false },
 			hora: { type: DataTypes.DATE, allowNull: false },
-			cor: { type: DataTypes.STRING(6), allowNull: false },
+			cor: { type: DataTypes.BIGINT, allowNull: false },
 		},
 		{
 			tableName: 'habitos',
