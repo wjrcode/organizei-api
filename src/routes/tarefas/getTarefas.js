@@ -37,7 +37,8 @@ module.exports = Router({ mergeParams: true }).get(
 					id: tarefa.id,
 					nome: tarefa.nome,
 					nomeFormatado,
-					data: convertDateTime(tarefa.data),
+					dataFormatada: convertDateTime(tarefa.data, 'às '),
+					data: convertDateTime(tarefa.data,),
 					observacao: tarefa.observacao,
 					prioridade: tarefa.prioridade,
 					cor: tarefa.cor,
@@ -67,6 +68,7 @@ module.exports = Router({ mergeParams: true }).get(
 					nome: tarefa.nome,
 					nomeFormatado,
 					hora: convertDateTime(tarefa.hora),
+					dataFormatada: convertDateTime(tarefa.hora, 'às '),
 					dias: dias,
 					cor: tarefa.cor,
 					tipo: 'habito'
