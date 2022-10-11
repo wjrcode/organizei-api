@@ -2,6 +2,7 @@ module.exports = sequelize => {
 	const {
 		atividade,
 		habito,
+		rotina,
 		item,
 		lembrete,
 		lista,
@@ -18,6 +19,15 @@ module.exports = sequelize => {
 		}
 	})
 	habito.belongsTo(usuario)
+
+	habito.hasMany(rotina, {
+		as: 'rotina',
+		onDelete: 'CASCADE',
+		foreignKey: {
+			allowNull: false
+		}
+	})
+	rotina.belongsTo(habito)
 
 	usuario.hasMany(lembrete, {
 		as: 'lembrete',

@@ -15,11 +15,11 @@ module.exports = Router({ mergeParams: true }).get(
 
 			const habitos = await await models.habito.findAll({
 				order: [['hora', 'asc']],
-				where: { concluido: false }
+				where: { ativo: true }
 			})
 
 			let tarefas = []
-			
+
 			results.map((tarefa) => {
 
 				let tamanho = tarefa.nome.length
@@ -39,6 +39,7 @@ module.exports = Router({ mergeParams: true }).get(
 					nomeFormatado,
 					dataFormatada: convertDateTime(tarefa.data, 'às '),
 					data: convertDateTime(tarefa.data,),
+					dataOrdenacao: tarefa.data,
 					observacao: tarefa.observacao,
 					prioridade: tarefa.prioridade,
 					cor: tarefa.cor,
@@ -68,12 +69,21 @@ module.exports = Router({ mergeParams: true }).get(
 					nome: tarefa.nome,
 					nomeFormatado,
 					hora: convertDateTime(tarefa.hora),
+					dataOrdenacao: tarefa.hora,
 					dataFormatada: convertDateTime(tarefa.hora, 'às '),
 					dias: dias,
 					cor: tarefa.cor,
 					tipo: 'habito'
 				})
 			})
+
+			tarefas = tarefas.sort(function (a, b) {
+				let x = a.dataOrdenacao;
+				let y = b.dataOrdenacao;
+				if (x < y) { return -1; }
+				if (x > y) { return 1; }
+				return 0;
+			});
 
 			return res.status(201).json({ tarefas })
 		} catch (error) {

@@ -21,11 +21,16 @@ module.exports = Router({ mergeParams: true }).put(
 
 			if (!exists) return res.status(202).json({ valido: false, msg: 'Hábito não encontrada!' })
 
+			let data = new Date;
+			const [horas, minutos] = hora.split(':')
+			data.setHours(horas)
+			data.setMinutes(minutos)
+
 			const habito = await models.habito.update(
 				{
 					nome,
 					dias: dias.toString(),
-					hora: convertDateTime(hora),
+					hora: data,
 					cor,
 				},
 				{ where: { id: id } })

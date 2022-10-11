@@ -1,5 +1,5 @@
 const Router = require('express').Router
-const convertDateTime = require('../../helpers/convertDateTime')
+const getProximoDomingo = require('./helpers/getProximoDomingo')
 
 module.exports = Router({ mergeParams: true }).post(
 	'/habitos',
@@ -20,12 +20,28 @@ module.exports = Router({ mergeParams: true }).post(
 
 			if (exists) return res.status(202).json({ valido: false, msg: 'Já existe um hábito cadastrado com esse nome!' })
 
+			let data = new Date;
+			const [horas, minutos] = hora.split(':')
+			data.setHours(horas)
+			data.setMinutes(minutos)
+
 			const habito = await models.habito.create({
 				nome,
 				dias: dias.toString(),
-				hora: convertDateTime(hora),
+				hora: data,
 				cor,
 				usuarioId: 1
+			})
+
+			dias.map(async(dia)=>{
+				if(dia == '1') {
+					await models.rotina.create({
+						dias: dias.toString(),
+						data: getProximoDomingo(data),
+						cor,
+						habitoId: habito.id
+					})
+				}
 			})
 
 			return res.status(201).json({ id: habito.id, valido: true, msg: 'Hábito criado com sucesso!' })
