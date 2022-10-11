@@ -9,6 +9,7 @@ module.exports = (sequelize) => {
 			ativo: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
 			dias: { type: DataTypes.STRING(21), allowNull: false },
 			hora: { type: DataTypes.DATE, allowNull: false },
+			dataFinal: { type: DataTypes.DATE, allowNull: false },
 			cor: { type: DataTypes.BIGINT, allowNull: false },
 		},
 		{

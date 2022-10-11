@@ -3,7 +3,7 @@ module.exports = (date = new Date()) => {
 
 	const proximo = new Date(
 		dateCopy.setDate(
-			dateCopy.getDate() + ((7 - dateCopy.getDay() + 0) % 7 || 7),
+			dateCopy.getDate() + ((7 - dateCopy.getDay() + 1) % 7 || 7),
 		),
 	);
 

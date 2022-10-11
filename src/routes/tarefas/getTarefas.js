@@ -1,5 +1,6 @@
 const Router = require('express').Router
 const convertDateTime = require('../../helpers/convertDateTimeApp')
+const sequelize = require('sequelize')
 //const convertDateTime = require('../../helpers/convertDateTime')
 
 module.exports = Router({ mergeParams: true }).get(
@@ -15,7 +16,11 @@ module.exports = Router({ mergeParams: true }).get(
 
 			const habitos = await await models.habito.findAll({
 				order: [['hora', 'asc']],
-				where: { ativo: true }
+				include: ['rotina'],
+				where: {[sequelize.Op.and] : [
+					sequelize.literal('habito.ativo = true'),
+					sequelize.literal('rotina.concluido <> true')
+				]}
 			})
 
 			let tarefas = []
@@ -47,9 +52,13 @@ module.exports = Router({ mergeParams: true }).get(
 				})
 			})
 
-			habitos.map((tarefa) => {
+			habitos.map((habito) => {
 
-				let tamanho = tarefa.nome.length
+				habito.rotina.map((rotina)=>{
+
+				
+
+				let tamanho = habito.nome.length
 
 				let nomeFormatado = ''
 
@@ -57,24 +66,28 @@ module.exports = Router({ mergeParams: true }).get(
 
 					if (i > 0) nomeFormatado = nomeFormatado + `\n`;
 
-					nomeFormatado = nomeFormatado + tarefa.nome.slice(i, i + 15)
+					nomeFormatado = nomeFormatado + habito.nome.slice(i, i + 15)
 
 				}
-				//console.log
-				const dia = tarefa.dias.replace(/(\[)|(\])|(\ )/g, "")
+
+				const dia = habito.dias.replace(/(\[)|(\])|(\ )/g, "")
 
 				const dias = dia.split(',')
 				tarefas.push({
-					id: tarefa.id,
-					nome: tarefa.nome,
+					id: habito.id,
+					idRotina: rotina.id,
+					nome: habito.nome,
 					nomeFormatado,
-					hora: convertDateTime(tarefa.hora),
-					dataOrdenacao: tarefa.hora,
-					dataFormatada: convertDateTime(tarefa.hora, 'às '),
+					hora: convertDateTime(rotina.data),
+					dataFinal: convertDateTime(habito.dataFinal),
+					dataOrdenacao: rotina.data,
+					dataFormatada: convertDateTime(rotina.data, 'às '),
 					dias: dias,
-					cor: tarefa.cor,
+					cor: habito.cor,
 					tipo: 'habito'
 				})
+
+			})
 			})
 
 			tarefas = tarefas.sort(function (a, b) {
