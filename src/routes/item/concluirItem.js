@@ -1,7 +1,7 @@
 const Router = require('express').Router
 
 module.exports = Router({ mergeParams: true }).put(
-	'/items/:id/concluir',
+	'/item/:id/concluir',
 	async (req, res, next) => {
 		try {
 			const { id } = req.params
