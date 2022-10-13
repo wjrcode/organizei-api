@@ -1,4 +1,4 @@
-const Router = require('express').Routerta
+const Router = require('express').Router
 
 module.exports = Router({ mergeParams: true }).put(
 	'/listas/:id',
