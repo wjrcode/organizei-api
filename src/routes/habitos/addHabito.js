@@ -65,7 +65,6 @@ module.exports = Router({ mergeParams: true }).post(
 			const d2 =  convertDateTime(dataFinal);
 			const diffInMs = new Date(d2) - new Date(d1)
 			const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-			console.log(diffInDays) // 38
 
 			for (var i = 0; i < diffInDays; i += 7) {
 				dias.map(async (dia, i) => {

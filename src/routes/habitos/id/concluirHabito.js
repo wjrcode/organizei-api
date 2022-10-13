@@ -31,7 +31,7 @@ module.exports = Router({ mergeParams: true }).put(
 			// 	},
 			// 	{ where: { id } })
 
-			return res.status(201).json({ valido: true, msg: 'Hábito concluída com sucesso!' })
+			return res.status(201).json({ valido: true, msg: 'Hábito concluído com sucesso!' })
 		} catch (error) {
 			return next(error)
 		}
