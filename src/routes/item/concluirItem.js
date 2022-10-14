@@ -9,7 +9,7 @@ module.exports = Router({ mergeParams: true }).put(
 			const { models } = req.db
 
 			if (!id || id == 'null') return res.status(202).json({ valido: false, msg: 'ID não informado!' })
-			if (!concluido) return res.status(202).json({ valido: false, msg: 'Concluído não informado!' })
+			//if (concluido == '' || concluido == null || concluido == 'null') return res.status(202).json({ valido: false, msg: 'Concluído não informado!' })
 
 			const exists = await models.item.findByPk(id)
 
@@ -21,7 +21,7 @@ module.exports = Router({ mergeParams: true }).put(
 				},
 				{ where: { id } })
 
-			return res.status(201).json({ valido: true, msg: 'Item concluída com sucesso!' })
+			return res.status(201).json({ valido: true, msg: concluido? 'Item concluído com sucesso!' : 'Item desfeito!' })
 		} catch (error) {
 			return next(error)
 		}
