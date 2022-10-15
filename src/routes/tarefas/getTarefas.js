@@ -9,6 +9,8 @@ module.exports = Router({ mergeParams: true }).get(
 		try {
 			const { models } = req.db
 
+			let dataHoje = new Date()
+
 			const results = await await models.tarefa.findAll({
 				order: [['data', 'asc']],
 				where: { concluido: false }
@@ -17,11 +19,19 @@ module.exports = Router({ mergeParams: true }).get(
 			const habitos = await await models.habito.findAll({
 				order: [['hora', 'asc']],
 				include: ['rotina'],
-				where: {[sequelize.Op.and] : [
-					sequelize.literal('habito.ativo = true'),
-					sequelize.literal('rotina.concluido <> true')
-				]}
+				where: {
+					[sequelize.Op.and]: [
+						sequelize.literal('habito.ativo = true'),
+						sequelize.literal('rotina.concluido <> true')
+					]
+				}
 			})
+
+			const lembretes = await models.lembrete.findAll({
+				order: [['data', 'asc']],
+				where: { concluido: false }
+			})
+
 
 			let tarefas = []
 
@@ -54,11 +64,45 @@ module.exports = Router({ mergeParams: true }).get(
 
 			habitos.map((habito) => {
 
-				habito.rotina.map((rotina)=>{
+				habito.rotina.map((rotina) => {
 
-				
 
-				let tamanho = habito.nome.length
+
+					let tamanho = habito.nome.length
+
+					let nomeFormatado = ''
+
+					for (var i = 0; i < tamanho; i += 15) {
+
+						if (i > 0) nomeFormatado = nomeFormatado + `\n`;
+
+						nomeFormatado = nomeFormatado + habito.nome.slice(i, i + 15)
+
+					}
+
+					const dia = habito.dias.replace(/(\[)|(\])|(\ )/g, "")
+
+					const dias = dia.split(',')
+					tarefas.push({
+						id: habito.id,
+						idRotina: rotina.id,
+						nome: habito.nome,
+						nomeFormatado,
+						hora: convertDateTime(rotina.data),
+						dataFinal: convertDateTime(habito.dataFinal),
+						dataOrdenacao: rotina.data,
+						dataFormatada: convertDateTime(rotina.data, 'às '),
+						dias: dias,
+						cor: habito.cor,
+						tipo: 'habito'
+					})
+
+				})
+			})
+
+			lembretes.map((tarefa) => {
+
+				let tamanho = tarefa.nome.length
 
 				let nomeFormatado = ''
 
@@ -66,29 +110,43 @@ module.exports = Router({ mergeParams: true }).get(
 
 					if (i > 0) nomeFormatado = nomeFormatado + `\n`;
 
-					nomeFormatado = nomeFormatado + habito.nome.slice(i, i + 15)
+					nomeFormatado = nomeFormatado + tarefa.nome.slice(i, i + 15)
 
 				}
 
-				const dia = habito.dias.replace(/(\[)|(\])|(\ )/g, "")
+				let dataConcluiu = new Date(tarefa.dataConcluiu)
 
-				const dias = dia.split(',')
-				tarefas.push({
-					id: habito.id,
-					idRotina: rotina.id,
-					nome: habito.nome,
-					nomeFormatado,
-					hora: convertDateTime(rotina.data),
-					dataFinal: convertDateTime(habito.dataFinal),
-					dataOrdenacao: rotina.data,
-					dataFormatada: convertDateTime(rotina.data, 'às '),
-					dias: dias,
-					cor: habito.cor,
-					tipo: 'habito'
-				})
+				if (!tarefa.eAniversario) {
+					tarefas.push({
+						id: tarefa.id,
+						nome: tarefa.nome,
+						nomeFormatado,
+						dataFormatada: convertDateTime(tarefa.data, 'às '),
+						data: convertDateTime(tarefa.data),
+						eAniversario: tarefa.eAniversario,
+						dataOrdenacao: tarefa.data,
+						cor: tarefa.cor,
+						tipo: 'lembrete'
+					})
+				}
+				else if (!tarefa.dataConcluiu || (dataConcluiu.getFullYear() < dataHoje.getFullYear())) {
+					tarefa.data.setFullYear(dataHoje.getFullYear())
+					tarefas.push({
+						id: tarefa.id,
+						nome: tarefa.nome,
+						nomeFormatado,
+						dataFormatada: convertDateTime(tarefa.data, 'às '),
+						data: convertDateTime(tarefa.data),
+						eAniversario: tarefa.eAniversario,
+						dataOrdenacao: tarefa.data,
+						cor: tarefa.cor,
+						tipo: 'lembrete'
+					})
+				}
+
 
 			})
-			})
+
 
 			tarefas = tarefas.sort(function (a, b) {
 				let x = a.dataOrdenacao;

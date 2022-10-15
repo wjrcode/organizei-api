@@ -10,7 +10,7 @@ module.exports = Router({ mergeParams: true }).post(
 
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })
 			if (!data) return res.status(202).json({ valido: false, msg: 'Data não informada!' })
-			if (eAniversario.length < 1) return res.status(202).json({ valido: false, msg: '"É aniversário" não informado!' })
+			//if (eAniversario.length < 1) return res.status(202).json({ valido: false, msg: '"É aniversário" não informado!' })
 			if (!cor) return res.status(202).json({ valido: false, msg: 'Cor não informada!' })
 
 			if (cor == 0) return res.status(202).json({ valido: false, msg: 'Cor não informada!' })
@@ -22,7 +22,7 @@ module.exports = Router({ mergeParams: true }).post(
 			const lembrete = await models.lembrete.create({
 				nome,
 				data: convertDateTime(data),
-				eAniversario,
+				eAniversario: eAniversario == null? false : eAniversario,
 				cor,
 				usuarioId: 1
 			})

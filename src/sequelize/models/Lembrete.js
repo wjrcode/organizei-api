@@ -9,6 +9,8 @@ module.exports = (sequelize) => {
 			eAniversario: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 			data: { type: DataTypes.DATE, allowNull: false },
 			cor: { type: DataTypes.BIGINT, allowNull: false },
+			dataConcluiu: { type: DataTypes.DATE, allowNull: true },
+			concluido: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 		},
 		{
 			tableName: 'lembretes',

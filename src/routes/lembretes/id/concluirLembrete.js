@@ -1,0 +1,37 @@
+const Router = require('express').Router
+
+module.exports = Router({ mergeParams: true }).put(
+	'/lembretes/:id/concluir',
+	async (req, res, next) => {
+		try {
+			const { id } = req.params
+			const { concluido } = req.body
+			const { models } = req.db
+
+			if (!id || id == 'null') return res.status(202).json({ valido: false, msg: 'ID não informado!' })
+			if (!concluido) return res.status(202).json({ valido: false, msg: 'Concluído não informado!' })
+
+			const exists = await models.lembrete.findByPk(id)
+
+			if (!exists) return res.status(202).json({ valido: false, msg: 'Lembrete não encontrado!' })
+
+
+			if (!exists.eAniversario) {
+				await models.lembrete.update(
+					{
+						concluido
+					},
+					{ where: { id } })
+			}
+			else await models.lembrete.update(
+				{
+					dataConcluiu: new Date()
+				},
+				{ where: { id } })
+
+			return res.status(201).json({ valido: true, msg: 'Lembrete concluído com sucesso!' })
+		} catch (error) {
+			return next(error)
+		}
+	}
+)
