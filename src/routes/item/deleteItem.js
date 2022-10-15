@@ -7,9 +7,6 @@ module.exports = Router({ mergeParams: true }).delete(
 			const { id } = req.params
 			const { models } = req.db
 
-            console.log('its that for me')
-            console.log(id)
-
 			if (!id || id == 'null') return res.status(202).json({ valido: false, msg: 'ID não informado!' })
 
 			const exists = await models.item.findByPk(id)

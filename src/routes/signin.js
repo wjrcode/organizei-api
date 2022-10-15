@@ -15,8 +15,6 @@ module.exports = Router({ mergeParams: true }).post(
 
 			if (!usuario) return res.status(400).json('Usuário não cadastrado!')
 
-			console.log(senha)
-
 			if (!bcrypt.compareSync(senha, usuario.senha))
 				return res.status(400).json('Senha incorreta!')
 
