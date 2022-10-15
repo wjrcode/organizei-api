@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
 			nome: { type: DataTypes.STRING(45), allowNull: false },
 			eAniversario: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 			data: { type: DataTypes.DATE, allowNull: false },
-			cor: { type: DataTypes.STRING(6), allowNull: false },
+			cor: { type: DataTypes.BIGINT, allowNull: false },
 		},
 		{
 			tableName: 'lembretes',
