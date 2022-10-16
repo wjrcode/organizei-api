@@ -27,7 +27,7 @@ module.exports = Router({ mergeParams: true }).put(
 					nome,
 					dataInicial: convertDateTime(dataInicial),
 					observacao,
-					dataFinal: convertDateTime(dataIdataFinalnicial),
+					dataFinal: convertDateTime(dataFinal),
 					cor,
 				},
 				{ where: { id: id } })

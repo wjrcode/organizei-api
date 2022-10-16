@@ -9,11 +9,16 @@ module.exports = Router({ mergeParams: true }).get(
 		try {
 			const { models } = req.db
 
-			const projetos = await await models.projeto.findAll({
+			let projetos = await await models.projeto.findAll({
 				order: [
 					['id', 'ASC'],
 				],
 
+			})
+
+			 projetos.map((projeto)=>{
+				projeto.dataValues.dataInicial = convertDateTime(projeto.dataInicial).substring(0,10)
+				projeto.dataValues.dataFinal = convertDateTime(projeto.dataFinal).substring(0,10)
 			})
 
 			return res.status(201).json({ projetos })
