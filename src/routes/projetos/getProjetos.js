@@ -10,8 +10,10 @@ module.exports = Router({ mergeParams: true }).get(
 			const { models } = req.db
 
 			let projetos = await await models.projeto.findAll({
+				include: ['atividade'],
 				order: [
 					['id', 'ASC'],
+					[models.atividade, 'id', 'ASC']
 				],
 
 			})

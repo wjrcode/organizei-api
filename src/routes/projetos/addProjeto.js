@@ -5,9 +5,8 @@ module.exports = Router({ mergeParams: true }).post(
 	'/projetos',
 	async (req, res, next) => {
 		try {
-			const { nome, dataInicial, dataFinal, observacao, cor } = req.body
+			const { nome, dataInicial, dataFinal, observacao, cor, atividades } = req.body
 			const { models } = req.db
-
 
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })
 			if (!dataInicial) return res.status(202).json({ valido: false, msg: 'Data inicial não informada!' })
@@ -29,6 +28,27 @@ module.exports = Router({ mergeParams: true }).post(
 				cor,
 				usuarioId: 1
 			})
+
+			try {
+				atividades.map(async (atividade) => {
+
+					await models.atividade.create({
+						nome: atividade.nome,
+						dataInicial: convertDateTime(atividade.dataInicial),
+						observacao: atividade.observacao,
+						dataFinal: convertDateTime(atividade.dataFinal),
+						cor: atividade.cor,
+						prioridade: atividade.prioridade,
+						projetoId: projeto.id
+					})
+				})
+
+			} catch (error) {
+
+				await models.projeto.destroy({ where: { id: projeto.id } })
+				return res.status(202).json({ valido: false, msg: 'Erro ao criar projeto!' })
+
+			}
 
 			return res.status(201).json({ id: projeto.id, valido: true, msg: 'Projeto criado com sucesso!' })
 		} catch (error) {
