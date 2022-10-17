@@ -32,6 +32,21 @@ module.exports = Router({ mergeParams: true }).get(
 				where: { concluido: false }
 			})
 
+			const projetos = await await models.projeto.findAll({
+				include: ['atividade'],
+				order: [
+					['id', 'ASC'],
+					[models.atividade, 'id', 'ASC']
+				],
+				where: {
+					[sequelize.Op.and]: [
+						sequelize.literal('projeto.concluido <> true'),
+						sequelize.literal('atividade.concluido <> true')
+					]
+				}
+
+			})
+
 
 			let tarefas = []
 
@@ -145,6 +160,41 @@ module.exports = Router({ mergeParams: true }).get(
 				}
 
 
+			})
+
+			projetos.map((projeto) => {
+
+				projeto.atividade.map((atividade) => {
+
+
+
+					let tamanho = atividade.nome.length
+
+					let nomeFormatado = ''
+
+					for (var i = 0; i < tamanho; i += 15) {
+
+						if (i > 0) nomeFormatado = nomeFormatado + `\n`;
+
+						nomeFormatado = nomeFormatado + atividade.nome.slice(i, i + 15)
+
+					}
+
+					tarefas.push({
+						id: atividade.id,
+						nome: atividade.nome,
+						nomeFormatado,
+						dataInicial: convertDateTime(atividade.dataInicial),
+						dataFinal: convertDateTime(atividade.dataFinal),
+						dataOrdenacao: atividade.dataInicial,
+						dataFormatada: convertDateTime(atividade.dataInicial, 'às '),
+						prioridade: atividade.prioridade,
+						observacao: atividade.observacao,
+						cor: atividade.cor,
+						tipo: 'atividade'
+					})
+
+				})
 			})
 
 
