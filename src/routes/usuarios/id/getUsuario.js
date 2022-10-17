@@ -1,16 +1,14 @@
 const Router = require('express').Router
-const userAuthMiddleware = require('../../../middlewares/userAuth.middleware')
 
 module.exports = Router({ mergeParams: true }).get(
-	'/usuarios/:id',
-	userAuthMiddleware,
+	'/usuario/:id',
 	
 	async (req, res, next) => {
 		try {
 			const { id } = req.params
 			const { models } = req.db
 
-			const usuario = await models.usuario.findByPk(id, { attributes: { exclude: ['senha'] } })
+			const usuario = await models.usuario.findOne({ where: { token: id } }, { attributes: { exclude: ['senha'] } })
 			if (!usuario) return res.status(400).json('Usuário não cadastrado!')
 
 			return res.json(usuario)

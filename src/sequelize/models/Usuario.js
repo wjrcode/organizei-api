@@ -9,6 +9,7 @@ module.exports = (sequelize) => {
 			apelido: { type: DataTypes.STRING(15), allowNull: false },
 			email: { type: DataTypes.STRING, allowNull: false, unique: true },
 			senha: { type: DataTypes.STRING, allowNull: false },
+			token: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, unique: true, allowNull: false },
 		},
 		{
 			tableName: 'usuarios',

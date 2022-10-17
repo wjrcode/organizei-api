@@ -1,6 +1,7 @@
 const Router = require('express').Router
 const convertDateTime = require('../../helpers/convertDateTimeApp')
 const sequelize = require('sequelize')
+const getToken = require('../../helpers/getToken')
 //const convertDateTime = require('../../helpers/convertDateTime')
 
 module.exports = Router({ mergeParams: true }).get(
@@ -9,6 +10,7 @@ module.exports = Router({ mergeParams: true }).get(
 		try {
 			const { models } = req.db
 
+			console.log(getToken(req))
 			let dataHoje = new Date()
 
 			const results = await await models.tarefa.findAll({
