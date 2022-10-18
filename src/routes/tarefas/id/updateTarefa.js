@@ -22,7 +22,7 @@ module.exports = Router({ mergeParams: true }).put(
 
 			if (!exists) return res.status(202).json({ valido: false, msg: 'Tarefa não encontrada!' })
 
-			const tarefa = await models.tarefa.update(
+			await models.tarefa.update(
 				{
 					nome,
 					data: convertDateTime(data),
@@ -32,7 +32,7 @@ module.exports = Router({ mergeParams: true }).put(
 				},
 				{ where: { id: id } })
 
-			return res.status(201).json({ id: tarefa.id, valido: true, msg: 'Tarefa alterada com sucesso!' })
+			return res.status(201).json({ id: id, valido: true, msg: 'Tarefa alterada com sucesso!' })
 		} catch (error) {
 			return next(error)
 		}
