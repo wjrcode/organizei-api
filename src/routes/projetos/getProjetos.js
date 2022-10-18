@@ -1,13 +1,20 @@
 const Router = require('express').Router
 const convertDateTime = require('../../helpers/convertDateTimeApp')
+const getUsuario = require('../../helpers/getUsuario')
+const getProgressoProjeto = require('../../helpers/getProgressoProjeto')
+const userAuthMiddleware = require('../../middlewares/userAuth.middleware')
 const sequelize = require('sequelize')
 //const convertDateTime = require('../../helpers/convertDateTime')
 
 module.exports = Router({ mergeParams: true }).get(
 	'/projetos',
+	userAuthMiddleware,
+
 	async (req, res, next) => {
 		try {
 			const { models } = req.db
+
+			const usuarioId = await getUsuario(req);
 
 			let projetos = await await models.projeto.findAll({
 				include: ['atividade'],
@@ -15,92 +22,20 @@ module.exports = Router({ mergeParams: true }).get(
 					['id', 'ASC'],
 					[models.atividade, 'id', 'ASC']
 				],
-				where: { concluido: false }
+				where: {
+					[sequelize.Op.and]: [
+						sequelize.literal("projeto.concluido = false"),
+						sequelize.literal(`usuario_id = ${usuarioId}`)
+					]
+				}
 
 			})
 
 			projetos.map((projeto) => {
-				let qtdBaixa = projeto.atividade.filter(atividade => {
-					if (atividade.prioridade == 'baixa') {
-						return true;
-					}
 
-					return false;
-				}).length;
-				let qtdMedia = projeto.atividade.filter(atividade => {
-					if (atividade.prioridade == 'média') {
-						return true;
-					}
-
-					return false;
-				}).length;
-				let qtdAlta = projeto.atividade.filter(atividade => {
-					if (atividade.prioridade == 'alta') {
-						return true;
-					}
-
-					return false;
-				}).length;
-
-				let qtdBaixaConcluida = projeto.atividade.filter(atividade => {
-					if (atividade.prioridade == 'baixa' && atividade.concluido) {
-						return true;
-					}
-
-					return false;
-				}).length;
-				let qtdMediaConcluida = projeto.atividade.filter(atividade => {
-					if (atividade.prioridade == 'média' && atividade.concluido) {
-						return true;
-					}
-
-					return false;
-				}).length;
-				let qtdAltaConcludida = projeto.atividade.filter(atividade => {
-					if (atividade.prioridade == 'alta' && atividade.concluido) {
-						return true;
-					}
-
-					return false;
-				}).length;
-
-				pesoBaixa = (qtdBaixa * 100) / projeto.atividade.length
-				pesoMedia = (qtdMedia * 100) / projeto.atividade.length
-				pesoAlta = (qtdAlta * 100) / projeto.atividade.length
-
-				console.log(qtdMedia)
-
-				let porcentagem = 0
-
-				if (qtdBaixa > 0 && qtdMedia > 0 && qtdAlta > 0) {
-					porcentagem = ((pesoBaixa / qtdBaixa) * qtdBaixaConcluida) + ((pesoMedia / qtdMedia) * qtdMediaConcluida) + ((pesoAlta / qtdAlta) * qtdAltaConcludida)
-				}
-				else if (qtdBaixa > 0 && qtdMedia > 0) {
-					porcentagem = ((pesoBaixa / qtdBaixa) * qtdBaixaConcluida) + ((pesoMedia / qtdMedia) * qtdMediaConcluida)
-				}
-				else if (qtdBaixa > 0 && qtdAlta > 0) {
-					porcentagem = ((pesoBaixa / qtdBaixa) * qtdBaixaConcluida) + ((pesoAlta / qtdAlta) * qtdAltaConcludida)
-				}
-				else if (qtdMedia > 0 && qtdAlta > 0) {
-					porcentagem = ((pesoMedia / qtdMedia) * qtdMediaConcluida) + ((pesoAlta / qtdAlta) * qtdAltaConcludida)
-				}
-				else if (qtdBaixa > 0) {
-					porcentagem = ((pesoBaixa / qtdBaixa) * qtdBaixaConcluida)
-				}
-				else if (qtdMedia > 0) {
-					console.log(pesoMedia)
-					console.log(qtdMediaConcluida)
-					porcentagem = ((pesoMedia / qtdMedia) * qtdMediaConcluida)
-				}
-				else if (qtdAlta > 0) {
-					porcentagem = ((pesoAlta / qtdAlta) * qtdAltaConcludida)
-				}
-
-
-				console.log(porcentagem);
 				projeto.dataValues.dataInicial = convertDateTime(projeto.dataInicial).substring(0, 10)
 				projeto.dataValues.dataFinal = convertDateTime(projeto.dataFinal).substring(0, 10)
-				projeto.dataValues.progresso = porcentagem + '%'
+				projeto.dataValues.progresso = getProgressoProjeto(projeto)
 
 				projeto.atividade.map((atividade) => {
 
