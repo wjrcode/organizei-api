@@ -18,8 +18,7 @@ module.exports = Router({ mergeParams: true }).post(
 			if (!bcrypt.compareSync(senha, usuario.senha))
 				return res.status(400).json('Senha incorreta!')
 
-	
-				return res.json({ token:usuario.token, apelido: usuario.apelido })
+			return res.json({ token: usuario.token, apelido: usuario.apelido })
 		} catch (error) {
 			return next(error)
 		}

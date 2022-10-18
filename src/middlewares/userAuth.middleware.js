@@ -8,15 +8,10 @@ module.exports = async (req, res, next) => {
 
 		if (!token || token === '') return res.status(403).send('Token vazio!')
 
-		const tokenUsuario = jwt.verify(token, process.env.USER_KEY)
-
-		if (!tokenUsuario) return res.status(403).send('Token inválido!')
-
-		const usuario = await models.usuario.findByPk(tokenUsuario.id)
+		const usuario = await models.usuario.findOne({where: {token}})
 
 		if (!usuario) return res.status(403).send('Usuário não encontrado!')
-
-		req.usuario = usuario
+		
 		return next()
 	} catch (error) {
 		return res.status(500).send(error)

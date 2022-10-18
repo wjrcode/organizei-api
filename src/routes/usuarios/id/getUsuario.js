@@ -8,7 +8,7 @@ module.exports = Router({ mergeParams: true }).get(
 			const { id } = req.params
 			const { models } = req.db
 
-			const usuario = await models.usuario.findOne({ where: { token: id } }, { attributes: { exclude: ['senha'] } })
+			const usuario = await models.usuario.findOne({ where: { token: id } })
 			if (!usuario) return res.status(400).json('Usuário não cadastrado!')
 
 			return res.json(usuario)
