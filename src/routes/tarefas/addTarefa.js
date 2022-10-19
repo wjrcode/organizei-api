@@ -1,12 +1,17 @@
 const Router = require('express').Router
 const convertDateTime = require('../../helpers/convertDateTime')
+const getUsuario = require('../../helpers/getUsuario')
+const userAuthMiddleware = require('../../middlewares/userAuth.middleware')
 
 module.exports = Router({ mergeParams: true }).post(
 	'/tarefas',
+	userAuthMiddleware,
 	async (req, res, next) => {
 		try {
 			const { nome, data, observacao, prioridade, cor } = req.body
 			const { models } = req.db
+
+			const usuarioId = await getUsuario(req);
 
 
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })
@@ -27,7 +32,7 @@ module.exports = Router({ mergeParams: true }).post(
 				observacao,
 				prioridade,
 				cor,
-				usuarioId: 1
+				usuarioId: usuarioId
 			})
 
 			return res.status(201).json({ id: tarefa.id, valido: true, msg: 'Tarefa criada com sucesso!' })

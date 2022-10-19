@@ -56,7 +56,7 @@ module.exports = Router({ mergeParams: true }).get(
 			let dashboard = []
 			let msg = ''
 
-			if (tarefas) {
+			if (tarefas.length >0) {
 				const qtdTarefasSemana = tarefas.length
 				const qtdTarefasSemanaConcluidas = tarefas.filter(tarefa => {
 					if (tarefa.concluido) {
@@ -79,7 +79,7 @@ module.exports = Router({ mergeParams: true }).get(
 				})
 			}
 
-			if (habitos) {
+			if (habitos.length >0) {
 				const qtdTarefasSemana = habitos.length
 				const qtdTarefasSemanaConcluidas = habitos.filter(tarefa => {
 					if (tarefa.concluido) {
@@ -102,7 +102,7 @@ module.exports = Router({ mergeParams: true }).get(
 				})
 			}
 
-			if (projetos) {
+			if (projetos.length >0) {
 				projetos.map((projeto) => {
 
 					msg = `Continue assim! Você concluiu ${getProgressoProjeto(projeto)} do projeto ${projeto.nome}`

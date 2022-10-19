@@ -29,6 +29,8 @@ module.exports = Router({ mergeParams: true }).post(
 				senha: senhaCrypt,
 			})
 
+
+
 			return res.status(201).json({ id: usuario.id, valido: true, msg: 'Usuário criado com sucesso!' })
 		} catch (error) {
 			return next(error)
