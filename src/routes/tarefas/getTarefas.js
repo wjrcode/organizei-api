@@ -10,8 +10,6 @@ module.exports = Router({ mergeParams: true }).get(
 		try {
 			const { models } = req.db
 
-			console.log('ui')
-
 			let dataHoje = new Date()
 
 			const results = await await models.tarefa.findAll({
