@@ -80,9 +80,11 @@ module.exports = Router({ mergeParams: true }).get(
 			}
 
 			if (habitos.length >0) {
-				const qtdTarefasSemana = habitos.length
-				const qtdTarefasSemanaConcluidas = habitos.filter(tarefa => {
-					if (tarefa.concluido) {
+				habitos.map((habito)=>{
+
+					const qtdTarefasSemana = habito.rotina.length
+				const qtdTarefasSemanaConcluidas =  habito.rotina.filter(rotina => {
+					if (rotina.concluido) {
 						return true;
 					}
 
@@ -100,6 +102,9 @@ module.exports = Router({ mergeParams: true }).get(
 					msg,
 					cor: habitos[0].cor
 				})
+
+				})
+				
 			}
 
 			if (projetos.length >0) {

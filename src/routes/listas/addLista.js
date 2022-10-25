@@ -1,11 +1,16 @@
 const Router = require('express').Router
+const getUsuario = require('../../helpers/getUsuario')
+const userAuthMiddleware = require('../../middlewares/userAuth.middleware')
 
 module.exports = Router({ mergeParams: true }).post(
 	'/listas',
+	userAuthMiddleware,
 	async (req, res, next) => {
 		try {
 			const { nome, cor, itens } = req.body
 			const { models } = req.db
+
+			const usuarioId = await getUsuario(req)
 
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })
 			if (!cor) return res.status(202).json({ valido: false, msg: 'Cor não informada!' })
@@ -20,7 +25,7 @@ module.exports = Router({ mergeParams: true }).post(
 			const lista = await models.lista.create({
 				nome,
 				cor,
-				usuarioId: 1
+				usuarioId: usuarioId
 			})
 
 			try {

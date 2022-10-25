@@ -7,6 +7,8 @@ const getProximaQuarta = require('./helpers/getProximaQuarta')
 const getProximaQuinta = require('./helpers/getProximaQuinta')
 const getProximaSexta = require('./helpers/getProximaSexta')
 const getProximoSabado = require('./helpers/getProximoSabado')
+const getUsuario = require('../../helpers/getUsuario')
+const userAuthMiddleware = require('../../middlewares/userAuth.middleware')
 
 
 function returnProximoDia(i, data) {
@@ -28,10 +30,13 @@ function returnProximoDia(i, data) {
 
 module.exports = Router({ mergeParams: true }).post(
 	'/habitos',
+	userAuthMiddleware,
 	async (req, res, next) => {
 		try {
 			const { nome, dias, hora, cor, dataFinal } = req.body
 			const { models } = req.db
+
+			const usuarioId = await getUsuario(req)
 
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })
 			if (!dias) return res.status(202).json({ valido: false, msg: 'Dias não informados!' })
@@ -56,7 +61,7 @@ module.exports = Router({ mergeParams: true }).post(
 				hora: data,
 				cor,
 				dataFinal: convertDateTime(dataFinal),
-				usuarioId: 1
+				usuarioId: usuarioId
 			})
 
 			let proximadata = data

@@ -1,12 +1,17 @@
 const Router = require('express').Router
 const convertDateTime = require('../../helpers/convertDateTime')
+const getUsuario = require('../../helpers/getUsuario')
+const userAuthMiddleware = require('../../middlewares/userAuth.middleware')
 
 module.exports = Router({ mergeParams: true }).post(
 	'/projetos',
+	userAuthMiddleware,
 	async (req, res, next) => {
 		try {
 			const { nome, dataInicial, dataFinal, observacao, cor, atividades } = req.body
 			const { models } = req.db
+
+			const usuarioId = await getUsuario(req)
 
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })
 			if (!dataInicial) return res.status(202).json({ valido: false, msg: 'Data inicial não informada!' })
@@ -26,7 +31,7 @@ module.exports = Router({ mergeParams: true }).post(
 				observacao,
 				dataFinal: convertDateTime(dataFinal),
 				cor,
-				usuarioId: 1
+				usuarioId: usuarioId
 			})
 
 			try {
