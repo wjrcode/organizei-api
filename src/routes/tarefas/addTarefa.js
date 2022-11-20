@@ -11,7 +11,7 @@ module.exports = Router({ mergeParams: true }).post(
 			const { nome, data, observacao, prioridade, cor } = req.body
 			const { models } = req.db
 
-			const usuarioId = await getUsuario(req);
+			const usuarioId = await getUsuario(req)
 
 
 			if (!nome) return res.status(202).json({ valido: false, msg: 'Nome não informado!' })

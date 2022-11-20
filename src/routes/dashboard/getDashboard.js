@@ -90,7 +90,7 @@ module.exports = Router({ mergeParams: true }).get(
 				})
 			}
 
-			if (habitos.length > 0) {
+			if (habitos.length >0) {
 				const qtdTarefasSemana = habitos.length
 				const qtdTarefasSemanaConcluidas = habitos.filter(tarefa => {
 					if (tarefa.concluido) {
@@ -121,6 +121,9 @@ module.exports = Router({ mergeParams: true }).get(
 					order,
 					cor: habitos[0].cor
 				})
+
+				})
+				
 			}
 
 			if (projetos.length > 0) {
