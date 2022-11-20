@@ -26,6 +26,14 @@ module.exports = Router({ mergeParams: true }).post(
 
 			if (exists) return res.status(202).json({ valido: false, msg: 'Já existe uma tarefa cadastrada com esse nome e essa data!' })
 
+			const datavalida = new Date(convertDateTime(data)) < new Date() ? false : true
+
+			console.log(datavalida)
+			console.log(new Date(convertDateTime(data)))
+			console.log(new Date())
+
+			if (!datavalida) return res.status(202).json({ valido: false, msg: 'A data da tarefa não pode ser menor que a data atual!' })
+
 			const tarefa = await models.tarefa.create({
 				nome,
 				data: convertDateTime(data),

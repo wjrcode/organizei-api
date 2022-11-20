@@ -73,6 +73,7 @@ module.exports = Router({ mergeParams: true }).get(
 					dataOrdenacao: tarefa.data,
 					observacao: tarefa.observacao,
 					prioridade: tarefa.prioridade,
+					prioridadeOrder: tarefa.prioridade == 'baixa' ? 1 : tarefa.prioridade == 'média' ? 2 : tarefa.prioridade == 'alta' ? 3 : 0,
 					cor: tarefa.cor,
 					tipo: 'tarefa'
 				})
@@ -81,9 +82,6 @@ module.exports = Router({ mergeParams: true }).get(
 			habitos.map((habito) => {
 
 				habito.rotina.map((rotina) => {
-
-
-
 					let tamanho = habito.nome.length
 
 					let nomeFormatado = ''
@@ -107,6 +105,7 @@ module.exports = Router({ mergeParams: true }).get(
 						hora: convertDateTime(rotina.data),
 						dataFinal: convertDateTime(habito.dataFinal),
 						dataOrdenacao: rotina.data,
+						prioridadeOrder: rotina.prioridade == 'baixa' ? 1 : rotina.prioridade == 'média' ? 2 : rotina.prioridade == 'alta' ? 3 : 0,
 						dataFormatada: convertDateTime(rotina.data, 'às '),
 						dias: dias,
 						cor: habito.cor,
@@ -138,6 +137,7 @@ module.exports = Router({ mergeParams: true }).get(
 						nome: tarefa.nome,
 						nomeFormatado,
 						dataFormatada: convertDateTime(tarefa.data, 'às '),
+						prioridadeOrder: tarefa.prioridade == 'baixa' ? 1 : tarefa.prioridade == 'média' ? 2 : tarefa.prioridade == 'alta' ? 3 : 0,
 						data: convertDateTime(tarefa.data),
 						eAniversario: tarefa.eAniversario,
 						dataOrdenacao: tarefa.data,
@@ -155,6 +155,7 @@ module.exports = Router({ mergeParams: true }).get(
 						data: convertDateTime(tarefa.data),
 						eAniversario: tarefa.eAniversario,
 						dataOrdenacao: tarefa.data,
+						prioridadeOrder: tarefa.prioridade == 'baixa' ? 1 : tarefa.prioridade == 'média' ? 2 : tarefa.prioridade == 'alta' ? 3 : 0,
 						cor: tarefa.cor,
 						tipo: 'lembrete'
 					})
@@ -188,6 +189,7 @@ module.exports = Router({ mergeParams: true }).get(
 						dataInicial: convertDateTime(atividade.dataInicial),
 						dataFinal: convertDateTime(atividade.dataFinal),
 						dataOrdenacao: atividade.dataInicial,
+						prioridadeOrder: atividade.prioridade == 'baixa' ? 1 : atividade.prioridade == 'média' ? 2 : atividade.prioridade == 'alta' ? 3 : 0,
 						dataFormatada: convertDateTime(atividade.dataInicial, 'às '),
 						prioridade: atividade.prioridade,
 						observacao: atividade.observacao,
@@ -200,8 +202,8 @@ module.exports = Router({ mergeParams: true }).get(
 
 
 			tarefas = tarefas.sort(function (a, b) {
-				let x = a.dataOrdenacao;
-				let y = b.dataOrdenacao;
+				let x = a.dataOrdenacao - a.prioridadeOrder;
+				let y = b.dataOrdenacao - b.prioridadeOrder;
 				if (x < y) { return -1; }
 				if (x > y) { return 1; }
 				return 0;

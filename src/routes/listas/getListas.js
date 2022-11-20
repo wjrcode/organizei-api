@@ -13,6 +13,7 @@ module.exports = Router({ mergeParams: true }).get(
 				include: ['item'],
 				order: [
 					['id', 'ASC'],
+					[models.item, 'concluido', 'ASC'],
 					[models.item, 'id', 'ASC']
 				],
 				

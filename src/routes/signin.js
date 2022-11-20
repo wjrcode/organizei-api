@@ -9,6 +9,8 @@ module.exports = Router({ mergeParams: true }).post(
 			const { email, senha } = req.body
 			const { models } = req.db
 
+			console.log('aaa')
+
 			if (!email || !senha) return res.status(400).json('E-mail/Senha inválidos!')
 
 			const usuario = await models.usuario.findOne({ where: { email } })
