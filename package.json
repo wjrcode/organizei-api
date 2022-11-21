@@ -19,11 +19,12 @@
     "express": "^4.17.1",
     "glob": "^7.1.7",
     "jsonwebtoken": "^8.5.1",
+    "loadtest": "*",
     "node-windows": "^1.0.0-beta.5",
+    "nodemailer": "^6.8.0",
     "nodemon": "^2.0.7",
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.6.2",
-    "loadtest": "*"
+    "sequelize": "^6.6.2"
   }
 }

@@ -122,7 +122,7 @@ module.exports = Router({ mergeParams: true }).get(
 					cor: habitos[0].cor
 				})
 
-				})
+				
 				
 			}
 
