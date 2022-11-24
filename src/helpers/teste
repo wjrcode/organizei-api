@@ -1,0 +1,20 @@
+Projeto com atividades de prioridade baixa, média e alta
+	pesoBaixa = 15
+        	pesoMedia = 35
+       	pesoAlta = 50
+	porcentagem = ((pesoBaixa / qtdAtividadesBaixa) * qtdAtividadesBaixaConcluidas) + ((pesoMedia / qtdAtividadesMedia) * qtdAtividadesMediaConcluidas) + ((pesoAlta / qtdAtividadesAlta) * qtdAtividadesAltaConcludida)
+
+Projeto com atividades de prioridade baixa e média
+pesoBaixa = 40
+        	pesoMedia = 60
+        	porcentagem = ((pesoBaixa / qtdAtividadesBaixa) * qtdAtividadesBaixaConcluidas) + ((pesoMedia / qtdAtividadesMedia) * qtdAtividadesMediaConcluidas)
+
+Projeto com atividades de prioridade baixa e alta
+qtdAtividadesBaixa = 30
+        	pesoAlta = 70
+        	porcentagem = ((pesoBaixa / qtdAtividadesBaixa) * qtdAtividadesBaixaConcluidas) + ((pesoAlta / qtdAtividadesAlta) * qtdAtividadesAltaConcludida)
+
+Projeto com atividades de prioridade média e alta
+qtdAtividadesMedia = 40
+        	pesoMedia = 60
+        	porcentagem = ((pesoMedia / qtdAtividadesMedia) * qtdAtividadesMediaConcluidas) + ((pesoAlta / qtdAtividadesAlta) * qtdAtividadesAltaConcludida)
