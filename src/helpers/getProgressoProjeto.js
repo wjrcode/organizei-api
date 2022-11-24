@@ -62,7 +62,7 @@ module.exports = projeto => {
     }
     else if (qtdBaixa > 0 && qtdAlta > 0) {
         qtdBaixa = 30
-        pesoMedia = 70
+        pesoAlta = 70
         porcentagem = ((pesoBaixa / qtdBaixa) * qtdBaixaConcluida) + ((pesoAlta / qtdAlta) * qtdAltaConcludida)
     }
     else if (qtdMedia > 0 && qtdAlta > 0) {
