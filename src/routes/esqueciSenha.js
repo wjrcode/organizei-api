@@ -20,8 +20,8 @@ module.exports = Router({ mergeParams: true }).post(
                 port: 587,
                 secure: false,
                 auth: {
-                    user: 'willianjunior012@gmail.com',
-                    pass: 'jgwvxadlokeihtat',
+                    user: '',
+                    pass: '',
                 },
             });
 
